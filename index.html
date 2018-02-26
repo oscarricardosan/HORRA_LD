@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+
+    <title>Ahorra Led</title>
+
+    <!-- VUE -->
+    <script src="js/vue.min.js" type="text/javascript"></script>
+
+    <!-- UNDERSCORE JS -->
+    <script src="js/underscore-min.js" type="text/javascript"></script>
+
+    <script type="text/javascript" src="cordova.js"></script>
+
+    <!-- JQUERY -->
+    <script src="resources/bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
+
+    <!-- ACCOUNTING_JS -->
+    <script src="resources/bower_components/accounting/accounting.min.js" type="text/javascript"></script>
+
+    <!-- BOOTSTRAP -->
+    <link rel="stylesheet" href="resources/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <script src="resources/bower_components/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
+
+    <!-- BOOTSTRAP-VALIDATOR -->
+    <script src="resources/bower_components/bootstrap-validator/dist/validator.min.js" type="text/javascript"></script>
+
+    <!-- SELECT 2 -->
+    <link rel="stylesheet" href="resources/bower_components/select2/dist/css/select2.min.css">
+    <script src="resources/bower_components/select2/dist/js/select2.js" type="text/javascript"></script>
+
+    <!-- FONTAWESOME -->
+    <link rel="stylesheet" href="resources/font-awesome-4.7.0/css/font-awesome.min.css">
+
+    <!-- MENU -->
+    <link rel="stylesheet" href="css/menu.css">
+
+    <!-- JSON EXTERNALS -->
+    <script type="text/javascript" src="sources/LightBulbs.js?2"></script>
+
+    <style>
+        body {
+            font-family: "Source Sans Pro",sans-serif;
+            min-height: 800px;
+            padding-top: 56px;
+        }
+        .numeric{ text-align: right; }
+        .no-ul-margin-bottom>ul{
+            margin-bottom: 0px!important;
+        }
+
+        .bounce-enter-active {
+            animation: bounce-in .5s;
+        }
+        .bounce-leave-active {
+            animation: bounce-in .5s reverse;
+        }
+        @keyframes bounce-in {
+            0% {
+                transform: scale(0);
+            }
+            50% {
+                transform: scale(1.5);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Enter and leave animations can use different */
+        /* durations and timing functions.              */
+        .slide-fade-enter-active {
+            transition: all .3s ease;
+        }
+        .slide-fade-leave-active {
+            transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+        }
+        .slide-fade-enter, .slide-fade-leave-to
+            /* .slide-fade-leave-active below version 2.1.8 */ {
+            transform: translateX(10px);
+            opacity: 0;
+        }
+
+        .callout.callout-danger{
+            background-color: #dd4b39 !important;
+            color: #fff !important;
+            border-color: #c23321;
+            border-radius: 3px;
+            margin: 0 0 20px 0;
+            padding: 15px 30px 15px 15px;
+            border-left: 5px solid #eee;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        .callout.callout-warning{
+            background-color: #f39c12 !important;
+            color: #fff !important;
+            border-radius: 3px;
+            margin: 0 0 20px 0;
+            padding: 15px 30px 15px 15px;
+            border-left: 5px solid #eee;
+            border-color: #c87f0a;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        .callout p:last-child {
+            margin-bottom: 0;
+        }
+
+        .callout.callout-danger {
+            border-color: #c23321;
+            font-size: 12px;
+        }
+        .callout {
+            border-radius: 3px;
+            margin: 0 0 20px 0;
+            padding: 15px 30px 15px 15px;
+            border-left: 5px solid #eee;
+        }
+
+        .cargador{
+            color: rgb(2, 171, 174);
+            text-align: center;
+        }
+        .absolute_loading{
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 20px;
+            height: 100%;
+            left: 0;
+            padding-top: 8em;
+            position: fixed;
+            text-align: center;
+            top: 0;
+            width: 100%;
+        }
+
+        *{
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <nav class="navbar navbar-default no-margin navbar-fixed-top">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header fixed-brand">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"  id="menu-toggle">
+                    <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
+                </button>
+                <a class="navbar-brand" href="#" style="padding: 5px 30px">
+                    <img class="pull-right" src="images/arh.png" style="height: 42px">
+                </a>
+            </div><!-- navbar-header-->
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active" >
+                        <button class="navbar-toggle collapse in" data-toggle="collapse" id="menu-toggle-2">
+                            <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
+                        </button>
+                    </li>
+                </ul>
+            </div><!-- bs-example-navbar-collapse-1 -->
+        </nav>
+        <div id="wrapper" class="toggled-2">
+            <!-- Sidebar -->
+            <div id="sidebar-wrapper">
+                <ul class="sidebar-nav nav-pills nav-stacked" id="menu">
+                    <li class="active">
+                        <a href="index.html"><span class="fa-stack fa-lg pull-left">
+                            <i class="fa fa-calculator fa-stack-1x "></i></span>Calculadora
+                        </a>
+                    </li>
+                    <li>
+                        <a :href="url_savne" class="enlaceExterno"><span class="fa-stack fa-lg pull-left">
+                            <i class="fa fa-link fa-stack-1x"></i>
+                        </span>Página del desarrollador</a>
+                    </li>
+                    <li>
+                        <a :href="url_apk_android" class="enlaceExterno"><span class="fa-stack fa-lg pull-left">
+                            <i class="fa fa-android fa-stack-1x "></i>
+                        </span>Versión para android</a>
+                    </li>
+                    <li>
+                        <a :href="url_web" class="enlaceExterno"><span class="fa-stack fa-lg pull-left">
+                            <i class="fa fa-desktop fa-stack-1x "></i>
+                        </span>Versión web</a>
+                    </li>
+                </ul>
+            </div><!-- /#sidebar-wrapper -->
+
+            <div id="page-content-wrapper" style="padding-top: 16px;">
+                <div class="container-fluid xyz">
+                    <div class="row">
+                        <form v-on:submit.prevent>
+                            <div class="colxs-12 col-sm-12" style="text-align: center">
+                                <h3 style="margin-top: 0;">
+                                    <i class="fa fa-lightbulb-o" style="color:#d8630a;"></i> Ahorra LED
+                                </h3>
+                            </div>
+                            <div class="colxs-12 col-sm-6"  v-if="!show_result">
+                                <hr/>
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        Valor KwH promedio $
+                                    </label>
+                                    <input class="form-control" type="number" step="0.01" v-model="data_calculator.kmw_value" style="text-align: right" required min="1" name="el_1">
+                                    <p class="help-block">
+                                        Encuéntralo en tu factura de energía
+                                    </p>
+                                </div>
+                                <div class="form-group" style="text-align: center">
+                                    <a href="#" data-toggle="modal" data-target="#modalAdd_bulb">
+                                        <i class="fa fa-plus"></i> Agregar bombilla/lámpara convencional
+                                    </a>
+                                </div>
+                                <div v-if="data_calculator.light_bulbs.length > 0">
+                                    <ul class="list-group">
+                                        <li v-for="(bulb, index) in data_calculator.light_bulbs" class="list-group-item" style="background: #d5ffe3;">
+                                            {{ bulb.count_bulbs }} {{ bulb.bulb.label }}<br>
+                                            Activo {{ bulb.active_hours }} hora(s)
+                                            <div style="text-align: right">
+                                                <a href="#" v-on:click.prevent="removeBuld(index)" style="color: darkred!important;">
+                                                    <i class="fa fa-close"></i> Retirar
+                                                </a>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <div class="form-group" style="text-align: center">
+                                        <a href="#" data-toggle="modal" data-target="#modalAdd_bulb">
+                                            <i class="fa fa-plus"></i> Agregar bombilla/lámpara convencional
+                                        </a>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <button class="btn btn-primary btn-block" style="border-radius: 0" v-on:click.prevent="calcular">
+                                            <i class="fa fa-dollar"></i>
+                                            Calcular cuanto te ahorrarías
+                                        </button>
+                                    </div>
+                                </div>
+                                <p v-else class="help-block" style="margin-bottom: 3em;">
+                                    Para comenzar debes especificar que bombillas o lámparas tradicionales usas.
+                                </p>
+
+                            </div>
+                            <div class="colxs-12 col-sm-6">
+                                <hr style="margin-bottom: 10px"/>
+                                <transition name="slide-fade">
+                                    <div v-if="show_result">
+                                        <h4 style="text-align: center; color: #02abae;">Resultados</h4>
+
+                                        <div class="form-group" style="border-top: 1px solid #ccc">
+                                            <label class="control-label">Costo aproximado de energía sistema actual</label>
+                                            <div style="text-align: center; font-size: 1.2em;">{{ data_result.costo_aprox_sis_actual | formatMoney }}</div>
+                                        </div>
+
+                                        <div class="form-group" style="border-top: 1px solid #ccc">
+                                            <label class="control-label">Costo aproximado de energía con iluminación tipo LED</label>
+                                            <div style="text-align: center; font-size: 1.2em;">{{ data_result.costo_aprox_sis_led | formatMoney }}</div>
+                                        </div>
+
+                                        <div class="form-group" style="border-top: 1px solid #ccc">
+                                            <label class="control-label">Ahorro aproximado al mes</label>
+                                            <div style="text-align: center; font-size: 1.2em;">{{ data_result.ahorro_aprox_mes | formatMoney }}</div>
+                                        </div>
+
+                                        <div class="form-group" style="border-top: 1px solid #ccc">
+                                            <label class="control-label">Porcentaje ahorro de energía</label>
+                                            <div style="text-align: center; font-size: 1.2em;">{{ data_result.porcentaje_ahorro_mes | formatNumber }}%</div>
+                                        </div>
+
+                                        <div class="form-group" style="border-top: 1px solid #ccc">
+                                            <label class="control-label">Valor inversión reemplazo por lámparas tipo LED</label>
+                                            <div style="text-align: center; font-size: 1.2em;">{{ data_result.val_inversion_reemplazo_por_led | formatMoney }}</div>
+                                        </div>
+
+                                        <div class="form-group" style="border-top: 1px solid #ccc">
+                                            <label class="control-label">Numero de meses para retorno de inversión - ROI</label>
+                                            <div style="text-align: center; font-size: 1.2em;">{{ data_result.num_meses_retorno_inversion| formatNumber }}</div>
+                                        </div>
+
+                                        <div class="form-group" style="margin-top: 1em; text-align: center;">
+                                            <a href="#" v-on:click.prevent="show_result=false" class="btn-block btn btn-success" style="border-radius: 0">
+                                                <i class="fa fa-plus" aria-hidden="true"></i>
+                                                Nueva cotización
+                                            </a>
+                                        </div>
+
+                                        <div class="form-group" style="margin-top: 1em; text-align: center;">
+                                            <a href="#" v-on:click.prevent data-toggle="modal" data-target="#modalEmail" class="btn-block btn btn-primary" style="border-radius: 0">
+                                                <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                                                Enviar a email
+                                            </a>
+                                        </div>
+                                    </div>
+                                </transition>
+                            </div>
+
+                            <div class="col-sm-12" style="text-align: center; padding-top: 0em; padding-bottom: 10em">
+                                <hr/>
+                                <div class="col-sm-4" style="text-align: center; padding-bottom: 2em;">
+                                    Desarrollada por<br>
+                                    <img src="images/savne_net.png" style="height: 50px"><br>
+                                    <a :href="url_savne" class="enlaceExterno">www.savne.net</a>
+                                    <br>
+                                    En alianza con <br>
+                                    <img src="images/arh.png" style="height: 50px"><br>
+                                    <a :href="url_web" class="enlaceExterno">{{ url_web }}</a>
+                                </div>
+                                <div class="col-sm-4" style="text-align: center; padding-bottom: 2em;">
+                                    <a :href="url_apk_android" class="enlaceExterno">
+                                        <img alt='Disponible en Google Play' src='images/google-play-badge.png' style="max-height: 90px"/>
+                                    </a>
+                                </div>
+                                <div class="col-sm-4" style="text-align: center; padding-bottom: 2em;">
+                                    <i class="fa fa-desktop" aria-hidden="true" style="color: #286090; font-size: 36px;"></i><br>
+                                    Versión web<br>
+                                    <a :href="url_web" class="enlaceExterno">
+                                        {{ url_web }}
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div v-if="calculando" class="absolute_loading">
+            <span>Calculando...</span><br>
+            <img src="images/bombillo.png" style="width: 200px; max-width: 80%;"/><br>
+            <i class="fa fa-spinner fa-spin fa-2x fa-fw"></i><br>
+        </div>
+
+
+        <!-- MODALS -->
+
+        <div class="modal fade" id="modalAdd_bulb" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <form>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Información de bombillas/lámparas</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Bombilla/lámpara:</label>
+                            <select class="form-control bulb_id" required>
+                                <option value="">Selecciona el tipo de bombilla/lámpara</option>
+                                <option v-for="bulb in sources.LightBulbs" :value="bulb.id">{{ bulb.label }}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Cantidad:</label>
+                            <input type="number" class="form-control count_bulbs numeric" required value="1" min="1">
+                        </div>
+                        <div class="form-group">
+                            <label>Horas promedio al día  activas:</label>
+                            <input type="number" class="form-control active_hours numeric" required value="1" min="1">
+                        </div>
+
+                    </div>
+                    <div class="modal-footer" >
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Volver</button>
+                        <button type="submit" class="btn btn-primary">Agregar</button>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modalEmail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <form id="formEmail">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Información para enviar email</h4>
+                        </div>
+                        <div class="modal-body" v-if="!enviando_email">
+                            <div class="form-group">
+                                <label>Tu nombre:</label>
+                                <input type="text" class="form-control" v-model="data_email.name" required name="t[]">
+                            </div>
+                            <div class="form-group">
+                                <label>Tu email:</label>
+                                <input type="email" class="form-control" placeholder="tu_email@dominio.com" v-model="data_email.email" required name="t[]">
+                                <p class="help-block">
+                                    A este email se enviará la cuenta de cobro
+                                </p>
+                            </div>
+                            <div class="form-group">
+                                <label>Tu número telefónico:</label>
+                                <input type="text" class="form-control" v-model="data_email.phone" required name="t[]">
+                            </div>
+
+                        </div>
+                        <div class="modal-body" v-else>
+                            <i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>
+                            <span>Un momento por favor, estamos enviando tu email...</span>
+                        </div>
+
+                        <div class="modal-footer">
+                            <template v-if="!enviando_email">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">Enviar</button>
+                            </template>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <div class="modal fade modalConAnuncio modalConAnuncio_1" tabindex="-1" role="dialog" data-show="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">RECUERDA</h4>
+                </div>
+                <div class="modal-body">
+                    <div style="text-align: center">
+                        <img src="images/bombillo.png" width="200px"/>
+                    </div>
+                    <p style="text-align: center">
+                        Si necesitas asesoría <strong> contable o tecnologíca </strong><br>
+                        (sistemas de información, aplicaciones móviles, correo electrónico corporativo...)<br>
+                        no dudes en escribirnos a <br>
+                        <h4 style="text-align: center">
+                            <a href="mailto:contabilidad@agasesoriascontables.com">contabilidad@agasesoriascontables.com</a>
+                        </h4>
+                        <h4 style="text-align: center">
+                            <a href="mailto:asesor_tecnologico@savne.net">asesor_tecnologico@savne.net</a>
+                        </h4>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Continuar</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade modalConAnuncio modalConAnuncio_2" tabindex="-1" role="dialog" data-show="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Aún usas gmail o hotmail?</h4>
+                </div>
+                <div class="modal-body">
+                    <div style="text-align: center">
+                        <img src="images/email.png" width="150px"/>
+                    </div>
+                    <p style="text-align: center; padding-top: 1em;">
+                        Tener tu propio correo corporativo proyecta confianza,
+                        seguridad y seriedad ante clientes y proveedores. <br>
+                        Para más información escríbenos a <br>
+                        <h4 style="text-align: center">
+                            <a href="mailto:asesor_tecnologico@savne.net">asesor_tecnologico@savne.net</a>
+                        </h4>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Continuar</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade modalConAnuncio modalConAnuncio_3" tabindex="-1" role="dialog" data-show="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Quieres tu propia calculadora o aplicación móvil?</h4>
+                </div>
+                <div class="modal-body">
+                    <div style="text-align: center">
+                        <img src="images/mobil.png" width="200px"/>
+                    </div>
+                    <p style="text-align: center; padding-top: 1em;">
+                        Convierte tu celular en tu herramienta de trabajo en el día a día<br>
+                        Escríbenos a:<br>
+                        <h4 style="text-align: center">
+                            <a href="mailto:asesor_tecnologico@savne.net">asesor_tecnologico@savne.net</a>
+                        </h4>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Continuar</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade modalConAnuncio modalConAnuncio_4" tabindex="-1" role="dialog" data-show="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Crear empresa</h4>
+                </div>
+                <div class="modal-body">
+                    <div style="text-align: center">
+                        <img src="images/company.png" style="width: 80%"/>
+                    </div>
+                    <p style="text-align: center; padding-top: 1em;">
+                        Deseas crear una empresa y no sabes por donde empezar?<br>
+                        Escríbenos a <br>
+                    <h4 style="text-align: center">
+                        <a href="mailto:contabilidad@agasesoriascontables.com">contabilidad@agasesoriascontables.com</a>
+                    </h4>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Continuar</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade modalConAnuncio modalConAnuncio_5" tabindex="-1" role="dialog" data-show="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Problemas con tu declaración de renta?</h4>
+                </div>
+                <div class="modal-body">
+                    <div style="text-align: center">
+                        <img src="images/declaracion_renta.jpg" style="width: 80%"/>
+                    </div>
+                    <p style="text-align: center; padding-top: 1em;">
+                        Nosotros te ayudamos para que te pongas al día en tu declaración de renta.<br>
+                        Para saber como escríbenos a:<br>
+                        <h4 style="text-align: center">
+                            <a href="mailto:contabilidad@agasesoriascontables.com">contabilidad@agasesoriascontables.com</a>
+                        </h4>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Continuar</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade modalConAnuncio modalConAnuncio_6" tabindex="-1" role="dialog" data-show="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Cansado de procesos repetitivos y aburridos?</h4>
+                </div>
+                <div class="modal-body">
+                    <div style="text-align: center">
+                        <img src="images/sistema_info.jpg" style="width: 80%"/>
+                    </div>
+                    <p style="text-align: center; padding-top: 1em;">
+                        Es hora que sistematices procesos y tengas tu propio sistema de información.<br>
+                        Para saber más escríbenos a:<br>
+                        <h4 style="text-align: center">
+                            <a href="mailto:asesor_tecnologico@savne.net">asesor_tecnologico@savne.net</a>
+                        </h4>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Continuar</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+    <div class="modal fade modalConAnuncio modalConAnuncio_7" tabindex="-1" role="dialog" data-show="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Consejo</h4>
+                </div>
+                <div class="modal-body">
+                    <div style="text-align: center">
+                        <img src="images/security_money.png" width="200px"/>
+                    </div>
+                    <p style="text-align: center; padding-top: 1em;">
+                        Cuida tus finanzas llevando tus cuentas claras.
+                        <h4 style="text-align: center">
+                            <a href="mailto:contabilidad@agasesoriascontables.com">contabilidad@agasesoriascontables.com</a>
+                        </h4>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Continuar</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <script type="text/javascript" src="js/index.js?8"></script>
+
+    <!-- MENU -->
+    <script type="text/javascript" src="js/menu.js"></script>
+
+
+
+</body>
+</html>
+
+
