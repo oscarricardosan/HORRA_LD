@@ -4,7 +4,7 @@ function iniciar(){
         vm= new Vue({
             el: '#app',
             data: {
-                url_apk_android: 'https://play.google.com/store/apps/details?id=osg.calculadora.retencionfuente_e_ica',
+                url_apk_android: 'https://play.google.com/store/apps/details?id=savne.arh_soluciones.ahorra_led',
                 url_savne: 'https://www.savne.net/',
                 url_web: 'https://arhsoluciones.com/',
                 error: 'Para hacer el calculo debes completar los campos en rojo',
