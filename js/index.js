@@ -169,6 +169,21 @@ $(document).ready(function(){
         vm.enviarEmail();
     });
 
+    $('input').on('focus', function (e) {
+        $(this)
+            .one('mouseup', function () {
+                $(this).select();
+                return false;
+            })
+            .select();
+    });
+
+    $('#modalAdd_bulb').on('hidden.bs.modal', function () {
+        $('#modalAdd_bulb').find('input').val('1');
+        $('#modalAdd_bulb').find('select').val('');
+    })
+
+
     $('.modalConAnuncio_'+getRandomInt(1, $('.modalConAnuncio').length+1 )).modal('show');
 
 });
