@@ -167,19 +167,10 @@ $(document).ready(function(){
     $('#formEmail').submit(function(event){
         event.preventDefault();
         vm.enviarEmail();
-    });
+    })
 
-    $('input').on('focus', function (e) {
-        $(this)
-            .one('mouseup', function () {
-                $(this).select();
-                return false;
-            })
-            .select();
-    });
-
-    $('#modalAdd_bulb').on('hidden.bs.modal', function () {
-        $('#modalAdd_bulb').find('input').val('1');
+    $('#modalAdd_bulb').on('show.bs.modal', function () {
+        $('#modalAdd_bulb').find('input').val('');
         $('#modalAdd_bulb').find('select').val('');
     })
 
