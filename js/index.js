@@ -68,7 +68,7 @@ function iniciar(){
                     data.data_result= this.data_result;
                     this.enviando_email= true;
                     var request = $.ajax({
-                        url: "http://arhsoluciones.com/simple_api/sendMail",
+                        url: "https://arhsoluciones.com/simple_api/sendMail",
                         jsonp: "callback",
                         dataType: "jsonp",
                         contentType: "application/json",
